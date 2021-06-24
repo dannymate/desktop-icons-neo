@@ -93,7 +93,15 @@ var DesktopGrid = class {
         this._container = new Gtk.Fixed();
         this._eventBox.add(this._container);
 
-        this.setDropDestination(this._eventBox);
+		this._ignorePlaintextEvents = Prefs.desktopSettings.get_boolean('ignore-plaintext-events');
+		Prefs.desktopSettings.connect('changed', (obj, key) => {
+			if (key == 'ignore-plaintext-events') {
+				this._ignorePlaintextEvents =
+					Prefs.desktopSettings.get_boolean('ignore-plaintext-events');
+				this.setDropDestination(this._eventBox);
+			}
+		});
+		this.setDropDestination(this._eventBox);
 
         // Transparent background, but only if this instance is working as desktop
         this._window.set_app_paintable(true);
@@ -165,7 +173,7 @@ var DesktopGrid = class {
         targets.add(Gdk.atom_intern('x-special/desktopicons-neo-icon-list', false), Gtk.TargetFlags.SAME_APP, 0);
         targets.add(Gdk.atom_intern('x-special/gnome-icon-list', false), 0, 1);
         targets.add(Gdk.atom_intern('text/uri-list', false), 0, 2);
-        targets.add(Gdk.atom_intern('text/plain', false), 0, 3);
+		if (!this._ignorePlaintextEvents) targets.add(Gdk.atom_intern("text/plain", false), 0, 3);
         dropDestination.drag_dest_set_target_list(targets);
         dropDestination.connect('drag-motion', (widget, context, x, y, time) => {
             x = this._elementWidth * Math.floor(x / this._elementWidth);

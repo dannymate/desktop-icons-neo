@@ -116,6 +116,7 @@ function showPreferences() {
     frame.add(buildSwitcher(desktopSettings, 'draw-symbols', _("Draw icon symbols")));
     frame.add(buildSwitcher(desktopSettings, 'add-volumes-opposite', _("Add new drives to the opposite side of the screen")));
     frame.add(buildSwitcher(desktopSettings, 'show-drop-place', _("Highlight the drop place during Drag'n'Drop")));
+    frame.add(buildSwitcher(desktopSettings, 'ignore-plaintext-events', _("Ignore plaintext Drag'n'Drop events")));
 
     frame.add(new Gtk.Separator({ orientation: Gtk.Orientation.HORIZONTAL }));
 
